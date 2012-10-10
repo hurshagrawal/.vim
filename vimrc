@@ -8,12 +8,17 @@ syntax on
 set encoding=utf-8
 
 " Whitespace stuff
-set nowrap
+set wrap
+set linebreak
+set nolist
+set textwidth=0
+set wrapmargin=0
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
+set smarttab
 set expandtab
-set list listchars=tab:\ \ ,trail:·
+" set list listchars=tab:\ \ ,trail:·
 
 " Searching
 set hlsearch
@@ -21,31 +26,71 @@ set incsearch
 set ignorecase
 set smartcase
 
-" Tab completion
+ "Tab completion
 set wildmode=list:longest,list:full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.class,.svn,vendor/gems/*
 
 " Status bar
 set laststatus=2
 
-" Without setting this, ZoomWin restores windows in a way that causes
-" equalalways behavior to be triggered the next time CommandT is used.
-" This is likely a bludgeon to solve some other issue, but it works
-set noequalalways
+" Exit insert mode
+imap jk <Esc>
 
-" NERDTree configuration
-let NERDTreeIgnore=['\.pyc$', '\.rbc$', '\~$']
-map <Leader>n :NERDTreeToggle<CR>
+" Up and down are more logical with g..
+nnoremap <silent> k gk
+nnoremap <silent> j gj
 
-" Command-T configuration
-let g:CommandTMaxHeight=20
+map ; :
+"
+" CtrlP
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn|dump)$'
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+noremap <Esc>p <c-p>
 
-" ZoomWin configuration
-map <Leader><Leader> :ZoomWin<CR>
+" Splits
+map <C-\> :vsp<CR>
+map <C-]> :sp<CR>
+nnoremap <c-h> <c-w>h 
+nnoremap <c-l> <c-w>l 
+nnoremap <c-j> <c-w>j 
+nnoremap <c-k> <c-w>k
+set winwidth=84
+set winminwidth=10
+" We have to have a winheight bigger than we want to set winminheight. But if
+" we set winheight to be huge before winminheight, the winminheight set will
+" fail.
+set winheight=5
+set winminheight=5
+set winheight=999
 
-" CTags
-map <Leader>rt :!ctags --extra=+f -R *<CR><CR>
-map <C-\> :tnext<CR>
+" Buffer navigation
+nnoremap <silent> <tab> :bnext<CR>
+
+" Commenting
+filetype plugin on
+map <C-_> <Leader>c<space>
+
+" Ack
+map <C-m> :cn<CR>
+map <C-n> :cp<CR>
+
+" Color Column
+set colorcolumn=80
+
+" Changes all tabs to spaces (for highlighting purposes)
+map <silent> <D-i> :%s/	/  /g<CR>
+
+" Remove search highlighting with esc
+nnoremap <silent> <esc> :noh<CR><esc>
+
+" Mouse
+if has("mouse")
+  set mouse=a
+  set mousehide
+endif
 
 " Remember last location in file
 if has("autocmd")
@@ -56,12 +101,12 @@ endif
 function s:setupWrapping()
   set wrap
   set wrapmargin=2
-  set textwidth=72
+  set textwidth=80
 endfunction
 
 function s:setupMarkup()
   call s:setupWrapping()
-  map <buffer> <Leader>p :Hammer<CR>
+"  map <buffer> <Leader>p :Hammer<CR>
 endfunction
 
 " make uses real tabs
@@ -77,6 +122,9 @@ au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn} call s:setupMarkup()
 au BufNewFile,BufRead *.json set ft=javascript
 
 au BufRead,BufNewFile *.txt call s:setupWrapping()
+
+" set clojure files to lisp coloring
+au BufRead,BufNewFile *.clj set ft=lisp
 
 " make Python follow PEP8 ( http://www.python.org/dev/peps/pep-0008/ )
 au FileType python set softtabstop=4 tabstop=4 shiftwidth=4 textwidth=79
@@ -125,25 +173,24 @@ set modeline
 set modelines=10
 
 " Default color scheme
-color desert
+syntax enable
+set background=dark
+colorscheme solarized
 
 " Directories for swp files
 set backupdir=~/.vim/backup
 set directory=~/.vim/backup
 
-" Turn off jslint errors by default
-let g:JSLintHighlightErrorLine = 0
-
-" MacVIM shift+arrow-keys behavior (required in .vimrc)
-let macvim_hig_shift_movement = 1
-
 " % to bounce from do to end etc.
 runtime! macros/matchit.vim
 
 " Show (partial) command in the status line
-set showcmd
+"set showcmd
 
 " Include user's local vim config
 if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
 endif
+
+" Installing pathogen
+call pathogen#infect()
