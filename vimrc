@@ -39,9 +39,11 @@ imap jk <Esc>
 " Up and down are more logical with g..
 nnoremap <silent> k gk
 nnoremap <silent> j gj
+nnoremap <silent> ˚ 10gk
+nnoremap <silent> ∆ 10gj
 
 map ; :
-"
+
 " CtrlP
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
@@ -50,12 +52,24 @@ let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn|dump)$'
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 noremap <Esc>p <c-p>
 
+"gui stuff
+set gfn=Monaco:h12
+set guioptions-=T
+syntax on
+
+"get rid of the scroll bars in macvim~!
+if has("gui_running")
+  set guioptions+=LlRrb
+  set guioptions-=LlRrb
+  set vb
+endif
+
 " Splits
 map <C-\> :vsp<CR>
 map <C-]> :sp<CR>
-nnoremap <c-h> <c-w>h 
-nnoremap <c-l> <c-w>l 
-nnoremap <c-j> <c-w>j 
+nnoremap <c-h> <c-w>h
+nnoremap <c-l> <c-w>l
+nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 set winwidth=84
 set winminwidth=10
@@ -68,6 +82,10 @@ set winheight=999
 
 " Buffer navigation
 nnoremap <silent> <tab> :bnext<CR>
+nnoremap <silent> <S-tab> :bprev<CR>
+
+" Clipboard
+set clipboard=unnamed
 
 " Commenting
 filetype plugin on
@@ -92,6 +110,10 @@ if has("mouse")
   set mousehide
 endif
 
+" No middleclick paste
+:map <MiddleMouse> <Nop>
+:imap <MiddleMouse> <Nop>
+
 " Remember last location in file
 if has("autocmd")
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
@@ -111,6 +133,9 @@ endfunction
 
 " make uses real tabs
 au FileType make set noexpandtab
+
+" Remove trailing whitespace on save
+autocmd BufWritePre * :%s/\s\+$//e
 
 " Thorfile, Rakefile, Vagrantfile and Gemfile are Ruby
 au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,config.ru}    set ft=ruby
