@@ -1,3 +1,6 @@
+" Installing pathogen
+call pathogen#infect()
+
 set nocompatible
 
 set number
@@ -45,6 +48,7 @@ nnoremap <silent> ∆ 10gj
 map ; :
 
 " CtrlP
+set runtimepath^=~/.vim/bundle/ctrlp.vim
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_working_path_mode = 'ra'
@@ -89,7 +93,6 @@ set clipboard=unnamed
 
 " Commenting
 filetype plugin on
-map <C-_> <Leader>c<space>
 
 " Ack
 map <C-m> :cn<CR>
@@ -97,6 +100,11 @@ map <C-n> :cp<CR>
 
 " Color Column
 set colorcolumn=80
+
+" Default color scheme
+syntax enable
+set background=dark
+colorscheme solarized
 
 " Changes all tabs to spaces (for highlighting purposes)
 map <silent> <D-i> :%s/	/  /g<CR>
@@ -197,11 +205,6 @@ let g:gist_open_browser_after_post = 1
 set modeline
 set modelines=10
 
-" Default color scheme
-syntax enable
-set background=dark
-colorscheme solarized
-
 " Directories for swp files
 set backupdir=~/.vim/backup
 set directory=~/.vim/backup
@@ -217,5 +220,3 @@ if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
 endif
 
-" Installing pathogen
-call pathogen#infect()
