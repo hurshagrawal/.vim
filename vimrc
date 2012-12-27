@@ -103,6 +103,11 @@ set colorcolumn=80
 
 " Default color scheme
 syntax enable
+
+if !has('gui_running')
+  let g:solarized_termtrans=1
+endif
+
 set background=dark
 colorscheme solarized
 
