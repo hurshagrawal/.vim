@@ -32,7 +32,7 @@
 
 [submodule "vim-powerline"]
         path = bundle/vim-powerline
-        url = git://github.com/tpope/vim-powerline.git
+        url = git://github.com/Lokaltog/vim-powerline.git
 
 [submodule "vim-rails"]
         path = bundle/vim-rails
