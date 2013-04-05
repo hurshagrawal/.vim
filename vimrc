@@ -1,7 +1,26 @@
-" Installing pathogen
-call pathogen#infect()
-
 set nocompatible
+filetype off
+
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" let Vundle manage Vundle
+" required!
+Bundle 'gmarik/vundle'
+
+" My Bundles here:
+Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-rails.git'
+Bundle 'mileszs/ack.vim.git'
+Bundle 'kien/ctrlp.vim'
+Bundle 'scrooloose/nerdcommenter'
+Bundle 'scrooloose/nerdtree'
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'tpope/vim-endwise'
+Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-haml'
+Bundle 'Lokaltog/vim-powerline'
+Bundle 'kchmck/vim-coffee-script'
 
 set number
 set ruler
@@ -75,7 +94,7 @@ nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
-set winwidth=84
+set winwidth=80
 set winminwidth=10
 " We have to have a winheight bigger than we want to set winminheight. But if
 " we set winheight to be huge before winminheight, the winminheight set will
@@ -85,11 +104,8 @@ set winminheight=5
 set winheight=999
 
 " Buffer navigation
-nnoremap <silent> <tab> :bnext<CR>
-nnoremap <silent> <S-tab> :bprev<CR>
-
-" Clipboard
-set clipboard=unnamed
+nnoremap <silent> <tab> <C-i>
+nnoremap <silent> <S-tab> <C-o>
 
 " Commenting
 filetype plugin on
@@ -127,22 +143,40 @@ endif
 :map <MiddleMouse> <Nop>
 :imap <MiddleMouse> <Nop>
 
+"no backup and i hate .sw*
+set nobackup
+set noswapfile
+
+" Auto save buffers whenever you lose focus
+au FocusLost * silent! wa
+
+" Auto save buffers when you switch context
+set autowriteall
+
+"u equls t_
+onoremap u t_
+
+"p equals i(
+onoremap p i(
+
+"b equals i[
+onoremap b i[
+
+"r equals i{
+onoremap r i{
+
+"q equals i"
+onoremap q i"
+
+nnoremap <silent> Y y$
+nnoremap <silent> R v$hp
+nnoremap <silent> <C-y> ggyy<C-o>
+
 " Remember last location in file
 if has("autocmd")
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
     \| exe "normal g'\"" | endif
 endif
-
-function s:setupWrapping()
-  set wrap
-  set wrapmargin=2
-  set textwidth=80
-endfunction
-
-function s:setupMarkup()
-  call s:setupWrapping()
-"  map <buffer> <Leader>p :Hammer<CR>
-endfunction
 
 " make uses real tabs
 au FileType make set noexpandtab
@@ -153,13 +187,8 @@ autocmd BufWritePre * :%s/\s\+$//e
 " Thorfile, Rakefile, Vagrantfile and Gemfile are Ruby
 au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,config.ru}    set ft=ruby
 
-" md, markdown, and mk are markdown and define buffer-local preview
-au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn} call s:setupMarkup()
-
 " add json syntax highlighting
 au BufNewFile,BufRead *.json set ft=javascript
-
-au BufRead,BufNewFile *.txt call s:setupWrapping()
 
 " set clojure files to lisp coloring
 au BufRead,BufNewFile *.clj set ft=lisp
