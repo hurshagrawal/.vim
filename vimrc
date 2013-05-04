@@ -9,7 +9,6 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 
 " My Bundles here:
-Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-rails.git'
 Bundle 'mileszs/ack.vim.git'
 Bundle 'kien/ctrlp.vim'
@@ -19,8 +18,11 @@ Bundle 'altercation/vim-colors-solarized'
 Bundle 'tpope/vim-endwise'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-haml'
+Bundle 'tpope/vim-surround'
 Bundle 'Lokaltog/vim-powerline'
 Bundle 'kchmck/vim-coffee-script'
+Bundle 'vim-scripts/BufOnly.vim.git'
+Bundle 'ervandew/supertab.git'
 
 set number
 set ruler
@@ -58,6 +60,9 @@ set laststatus=2
 " Exit insert mode
 imap jk <Esc>
 
+" Autocomplete on dashes
+set iskeyword+=-
+
 " Up and down are more logical with g..
 nnoremap <silent> k gk
 nnoremap <silent> j gj
@@ -66,13 +71,17 @@ nnoremap <silent> ∆ 10gj
 
 map ; :
 
+" Turn off accidental lowercasing
+vnoremap u y
+vnoremap U y
+
 " CtrlP
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_working_path_mode = 'ra'
-let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn|dump)$'
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn|dump|map)$'
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/source_maps/*
 noremap <Esc>p <c-p>
 
 "gui stuff
