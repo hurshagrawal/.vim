@@ -1,38 +1,43 @@
 set nocompatible
 filetype off
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+set rtp+=~/.vim/bundle/Vundle.vim/
+call vundle#begin()
 
 " let Vundle manage Vundle
 " required!
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/Vundle.vim'
 
 " My Bundles here:
-Bundle 'tpope/vim-rails.git'
-Bundle 'mileszs/ack.vim.git'
-Bundle 'kien/ctrlp.vim'
-Bundle 'scrooloose/nerdcommenter'
-Bundle 'scrooloose/nerdtree'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'tpope/vim-endwise'
-Bundle 'tpope/vim-fugitive'
-Bundle 'tpope/vim-haml'
-Bundle 'tpope/vim-surround'
-Bundle 'Lokaltog/vim-powerline'
-Bundle 'kchmck/vim-coffee-script'
-Bundle 'vim-scripts/BufOnly.vim.git'
-Bundle 'ervandew/supertab.git'
-Bundle 'tpope/vim-fireplace.git'
-Bundle 'guns/vim-clojure-static.git'
-Bundle 'kien/rainbow_parentheses.vim.git'
-Bundle 'Raimondi/delimitMate.git'
-Bundle 'statianzo/vim-jade.git'
-Bundle 'duff/vim-scratch.git'
-Bundle 'nathanaelkane/vim-indent-guides.git'
-Bundle 'jelera/vim-javascript-syntax.git'
-Bundle 'mattsacks/vim-fuzzee.git'
+Plugin 'mileszs/ack.vim.git'
+Plugin 'kien/ctrlp.vim'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'tpope/vim-vinegar'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-surround'
+Plugin 'Lokaltog/vim-powerline'
+Plugin 'vim-scripts/BufOnly.vim.git'
+Plugin 'kien/rainbow_parentheses.vim.git'
+Plugin 'Raimondi/delimitMate.git'
+Plugin 'digitaltoad/vim-pug'
+Plugin 'duff/vim-scratch.git'
+Plugin 'nathanaelkane/vim-indent-guides.git'
+Plugin 'pangloss/vim-javascript'
+Plugin 'mxw/vim-jsx'
+Plugin 'fatih/vim-go'
+Plugin 'leafgarland/typescript-vim'
+Plugin 'Quramy/vim-js-pretty-template'
+Plugin 'jason0x43/vim-js-indent'
+Plugin 'Shougo/vimproc.vim'
+Plugin 'Quramy/tsuquyomi'
+Plugin 'mattn/emmet-vim'
+Plugin 'ervandew/supertab'
 
+call vundle#end()
+filetype plugin indent on
+
+let g:jsx_ext_required = 0
 
 " use an undo file
 set undofile
@@ -44,6 +49,8 @@ syntax on
 
 " Set encoding
 set encoding=utf-8
+
+set mapleader='\'
 
 " Whitespace stuff
 set wrap
@@ -94,12 +101,6 @@ vnoremap U y
 nnoremap <C-q> Q
 nnoremap Q q
 
-" Add shortcuts for common commands
-map <C-t> :NERDTree<CR>
-map <C-e> :NERDTreeFind<CR>
-map <C-c> :call BrewCoffee()<CR>
-map <C-a> :Ack
-
 " Turn on rainbow parens
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
@@ -145,10 +146,6 @@ set winheight=5
 set winminheight=5
 set winheight=999
 
-" Buffer navigation
-nnoremap <silent> <tab> <C-i>
-nnoremap <silent> <S-tab> <C-o>
-
 " Commenting
 filetype plugin on
 
@@ -189,7 +186,7 @@ endif
 :map <MiddleMouse> <Nop>
 :imap <MiddleMouse> <Nop>
 
-"no backup and i hate .sw*
+"no backup and swap sucks
 set nobackup
 set noswapfile
 
@@ -198,21 +195,6 @@ au FocusLost * silent! wa
 
 " Auto save buffers when you switch context
 set autowriteall
-
-"u equls t_
-onoremap u t_
-
-"p equals i(
-onoremap p i(
-
-"b equals i[
-onoremap b i[
-
-"r equals i{
-onoremap r i{
-
-"q equals i"
-onoremap q i"
 
 "No arrow keys bro
 map <up> <nop>
@@ -231,8 +213,13 @@ nnoremap <silent> <C-y> ggyy<C-o>
 " Fold blocks
 map <Leader>z zf%
 
-" Auto folding in coffeescript
-au BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
+" Highlighting for golang
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_types = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
 
 " Remember last location in file
 if has("autocmd")
@@ -278,9 +265,19 @@ filetype plugin indent on
 
 " Indent guides
 let g:indent_guides_enable_on_vim_startup = 1
-let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
+let g:indent_guides_exclude_filetypes = ['help']
 let g:indent_guides_auto_colors = 0
-"autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg='#00333e' ctermbg=3
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg='#00333e' ctermbg=3
+
+" Set HTML indenting and zencoding
+filetype indent on
+set filetype=html           " abbrev -  :set ft=html
+set smartindent             " abbrev -  :set si
+
+let g:user_emmet_install_global = 0
+autocmd FileType html,css EmmetInstall
+let g:user_emmet_leader_key='<C-e>'
+
 
 " Opens an edit command with the path of the currently edited file filled in
 " Normal mode: <Leader>e
@@ -311,12 +308,6 @@ endif
 let g:gist_detect_filetype = 1
 let g:gist_open_browser_after_post = 1
 
-" Cawfee
-function! BrewCoffee()
-  silent! !coffee -p % &> /tmp/coffeetmp.js
-  sview /tmp/coffeetmp.js
-endfunc
-
 " Use modeline overrides
 set modeline
 set modelines=10
@@ -327,9 +318,6 @@ set directory=~/.vim/backup
 
 " % to bounce from do to end etc.
 runtime! macros/matchit.vim
-
-" Show (partial) command in the status line
-"set showcmd
 
 " Include user's local vim config
 if filereadable(expand("~/.vimrc.local"))
